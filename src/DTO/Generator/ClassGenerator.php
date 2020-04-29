@@ -10,6 +10,7 @@
 
 namespace HellFirePvP\Bundle\DTOGeneratorBundle\DTO\Generator;
 
+use HellFirePvP\Bundle\DTOGeneratorBundle\DTO\DTObject;
 use ReflectionClass;
 use UnexpectedValueException;
 
@@ -20,7 +21,7 @@ use UnexpectedValueException;
  *
  * @author HellFirePvP <dev.hellfire@gmail.com>
  */
-class DTOClassGenerator
+class ClassGenerator
 {
     /**
      * The directory the DTOs are saved into.
@@ -59,14 +60,12 @@ class <simpleClassName> extends \<fullDTOClassName>
      */
     public function getObjectClass(): string
     {
-        return <fullClassName>::class;
+        return \<fullClassName>::class;
     }
 }
 ';
 
     /**
-     * DTOClassGenerator constructor.
-     *
      * @param string $dtoDirectory The directory DTOs are generated into.
      * @param string $dtoNamespace The namespace of generated DTOs
      */
@@ -84,7 +83,23 @@ class <simpleClassName> extends \<fullDTOClassName>
      */
     public function generateDTOFile(ReflectionClass $class, string $targetFile)
     {
+        //Derived from Doctrine's Proxy Generator
 
+        preg_match_all('(<([a-zA-Z]+)>)', $this->dtoClassTemplate, $placeholderMatches);
+
+        $placeholderMatches = array_combine($placeholderMatches[0], $placeholderMatches[1]);
+        $placeholders       = [];
+
+        foreach ($placeholderMatches as $placeholder => $name) {
+            $placeholders[$placeholder] = [$this, 'generate' . ucfirst($name)];
+        }
+        foreach ($placeholders as &$placeholder) {
+            if (is_callable($placeholder)) {
+                $placeholder = call_user_func($placeholder, $class);
+            }
+        }
+
+        $this->storeDTOClass(strtr($this->dtoClassTemplate, $placeholders), $targetFile);
     }
 
     /**
@@ -122,6 +137,65 @@ class <simpleClassName> extends \<fullDTOClassName>
     {
         return rtrim($this->dtoDirectory, DIRECTORY_SEPARATOR) .
             DIRECTORY_SEPARATOR .
-            '__DTO__' . str_replace('\\', '_', $class->inNamespace()) . '.php';
+            '__DTO__' . str_replace('\\', '', $class->getName()) . '.php';
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// FUNCTIONS ACCESSED DYNAMICALLY TO GENERATE PLACEHOLDER DATA
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Accessed dynamically to generate input for the placeholder "attributes"
+     *
+     * @param ReflectionClass $class
+     * @return string
+     */
+    private function generateAttributes(ReflectionClass $class): string
+    {
+        return '';
+    }
+
+    /**
+     * Accessed dynamically to generate input for the placeholder "simpleClassName"
+     *
+     * @param ReflectionClass $class
+     * @return string
+     */
+    private function generateSimpleClassName(ReflectionClass $class): string
+    {
+        return $class->getShortName();
+    }
+
+    /**
+     * Accessed dynamically to generate input for the placeholder "namespace"
+     *
+     * @param ReflectionClass $class
+     * @return string
+     */
+    private function generateNamespace(ReflectionClass $class): string
+    {
+        return $this->dtoNamespace;
+    }
+
+    /**
+     * Accessed dynamically to generate input for the placeholder "fullDTOClassName"
+     *
+     * @param ReflectionClass $class
+     * @return string
+     */
+    private function generateFullDTOClassName(ReflectionClass $class): string
+    {
+        return DTObject::class;
+    }
+
+    /**
+     * Accessed dynamically to generate input for the placeholder "fullClassName"
+     *
+     * @param ReflectionClass $class
+     * @return string
+     */
+    private function generateFullClassName(ReflectionClass $class): string
+    {
+        return $class->getName();
     }
 }

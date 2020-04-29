@@ -1,2 +1,6 @@
+#Dependency handlings
 /vendor
 composer.lock
+
+#PHPUnit dust
+.phpunit*
