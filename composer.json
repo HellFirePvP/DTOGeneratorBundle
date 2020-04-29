@@ -1,0 +1,28 @@
+{
+    "name": "hellfirepvp/dto-generator-bundle",
+    "description": "This bundle provides utility to create DTO objects from POP objects.",
+    "keywords": ["dto"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "HellFirePvP",
+            "email": "dev.hellfire@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4.5",
+        "symfony/config": "^5.1",
+        "symfony/framework-bundle": "^5.1",
+        "symfony/dependency-injection": "^5.1",
+        "symfony/http-kernel": "^5.1",
+        "doctrine/annotations": "^1.0",
+        "symfony/validator": "^5.1"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "HellFirePvP\\Bundle\\DTOGeneratorBundle\\": "src/"
+        }
+    }
+}
