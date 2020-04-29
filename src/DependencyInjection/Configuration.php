@@ -23,7 +23,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('dto_generator');
         $rootNode = $treeBuilder->getRootNode();
-        
+
 
         return $treeBuilder;
     }

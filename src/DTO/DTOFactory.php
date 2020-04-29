@@ -8,11 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace HellFirePvP\Bundle\DTOGeneratorBundle;
+namespace HellFirePvP\Bundle\DTOGeneratorBundle\DTO;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-
-class DTOGeneratorBundle extends Bundle
+class DTOFactory
 {
 
+    public static function createObject(string $getObjectClass, object $param): object
+    {
+        return new class() {};
+    }
 }
