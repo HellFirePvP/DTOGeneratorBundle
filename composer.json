@@ -26,15 +26,15 @@
     },
     "autoload": {
         "psr-4": {
-            "HellFirePvP\\Bundle\\DTOGeneratorBundle\\": "src/"
+            "HellFirePvP\\Bundle\\DTOGeneratorBundle\\": ""
         },
         "exclude-from-classmap": [
-            "/tests/"
+            "/Tests/"
         ]
     },
     "autoload-dev": {
         "psr-4": {
-            "HellFirePvP\\Bundle\\DTOGeneratorBundle\\Tests\\": "tests/"
+            "HellFirePvP\\Bundle\\DTOGeneratorBundle\\Tests\\": "Tests/"
         }
     }
 }

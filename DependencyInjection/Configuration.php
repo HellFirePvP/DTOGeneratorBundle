@@ -22,8 +22,12 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('dto_generator');
-        $rootNode = $treeBuilder->getRootNode();
-
+        $treeBuilder->getRootNode()
+            ->children()
+                ->scalarNode('auto_loader_reference')->defaultValue('%kernel.project_dir%/vendor/autoload.php')->end()
+                ->scalarNode('dto_directory')->defaultValue('%kernel.cache_dir%/dto-generator/dto')->end()
+                ->scalarNode('dto_namespace')->defaultValue('DTOGenerator\\Generated\\')->end()
+            ->end();
 
         return $treeBuilder;
     }

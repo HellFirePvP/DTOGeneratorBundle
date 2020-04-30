@@ -1,4 +1,6 @@
 #Dependency handlings
+/.test
+/var
 /vendor
 composer.lock
 
